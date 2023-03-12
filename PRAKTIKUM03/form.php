@@ -1,7 +1,7 @@
-<?php 
+<?php
 
-$nama = $_POST ["nama"];
-$skill = $_POST ['skill'];
+$nama = $_POST["nama"];
+$skill = $_POST['skill'];
 $skor = 0;
 
 //buat logic nentuin skor dari skill
@@ -17,7 +17,7 @@ foreach ($skill as $s) {
         case 'javascript':
             $skor += 20;
             break;
-        case 'bootstrap':
+        case 'rwd':
             $skor += 20;
             break;
         case 'php':
@@ -29,12 +29,38 @@ foreach ($skill as $s) {
         case 'java':
             $skor += 50;
             break;
-        
+
         default:
-        $skor += 0;
+            $skor += 0;
             break;
     }
-    
+}
+
+if (isset($_POST['submit'])){
+    $nim = $_POST ['nim'];
+    $nama = $_POST ['nama'];
+    $jk = $_POST ['jk'];
+    $program_studi = $_POST ['program_studi'];
+    $skill= $_POST ['skill'];
+    $tempat_domisilil= $_POST ['tempat_domisili'];
+    $email= $_POST ['email'];
+
+    //Buat Fungsi status
+    function cekskor ($skor){
+        if ($skor >= 100 && $skor <= 150) {
+            return "Sangat Baik";
+        }elseif ($skor >= 60 && $skor <= 100){
+            return "Baik";
+        }elseif ($skor >= 40 && $skor <= 60){
+            return "Cukup";
+        }elseif ($skor >= 0 && $skor <= 40){
+            return "Kurang";
+        } else {
+            return "Tidak Memadai";
+        }
+        
+    }
+    $kategori_skill = cekskor($skor);
 }
 
 ?>
@@ -58,9 +84,52 @@ foreach ($skill as $s) {
         <h1>Form Pendaftaran</h1>
         <form method="POST" action="form.php">
             <div class="form-group row">
+                <label for="nim" class="col-4 col-form-label">NIM</label>
+                <div class="col-8">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fa fa-adn"></i>
+                            </div>
+                        </div>
+                        <input id="nim" name="nim" type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label for="nama" class="col-4 col-form-label">Nama Lengkap</label>
                 <div class="col-8">
-                    <input id="nama" name="nama" type="text" class="form-control">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fa fa-address-card"></i>
+                            </div>
+                        </div>
+                        <input id="nama" name="nama" type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-4">Jenis Kelamin</label>
+                <div class="col-8">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input name="jk" id="jk_0" type="radio" class="custom-control-input" value="laki-laki">
+                        <label for="jk_0" class="custom-control-label">Laki-Laki</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input name="jk" id="jk_1" type="radio" class="custom-control-input" value="perempuan">
+                        <label for="jk_1" class="custom-control-label">Perempuan</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="program_studi" class="col-4 col-form-label">Program Studi</label>
+                <div class="col-8">
+                    <select id="program_studi" name="program_studi" class="custom-select">
+                        <option value="SI">Sistem Informasi</option>
+                        <option value="TI">Teknik Informatika</option>
+                        <option value="BD">Bisnis Digital</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group row">
@@ -79,16 +148,46 @@ foreach ($skill as $s) {
                         <label for="skill[]_2" class="custom-control-label">JavaScript</label>
                     </div>
                     <div class="custom-control custom-checkbox custom-control-inline">
-                        <input name="skill[]" id="skill[]_3" type="checkbox" class="custom-control-input" value="bootstrap">
-                        <label for="skill[]_3" class="custom-control-label">Bootstrap</label>
+                        <input name="skill[]" id="skill[]_3" type="checkbox" class="custom-control-input" value="rwd">
+                        <label for="skill[]_3" class="custom-control-label">RWD Bootsrap</label>
                     </div>
                     <div class="custom-control custom-checkbox custom-control-inline">
-                        <input name="skill[]" id="skill[]_4" type="checkbox" class="custom-control-input" value="python">
-                        <label for="skill[]_4" class="custom-control-label">Python</label>
+                        <input name="skill[]" id="skill[]_4" type="checkbox" class="custom-control-input" value="php">
+                        <label for="skill[]_4" class="custom-control-label">PHP</label>
                     </div>
                     <div class="custom-control custom-checkbox custom-control-inline">
-                        <input name="skill[]" id="skill[]_5" type="checkbox" class="custom-control-input" value="java">
-                        <label for="skill[]_5" class="custom-control-label">Java</label>
+                        <input name="skill[]" id="skill[]_5" type="checkbox" class="custom-control-input" value="python">
+                        <label for="skill[]_5" class="custom-control-label">Python</label>
+                    </div>
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input name="skill[]" id="skill[]_6" type="checkbox" class="custom-control-input" value="java">
+                        <label for="skill[]_6" class="custom-control-label">Java</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="tempat_domisili" class="col-4 col-form-label">Tempat Domisili</label>
+                <div class="col-8">
+                    <select id="tempat_domisili" name="tempat_domisili" class="custom-select">
+                        <option value="jakarta">Jakarta</option>
+                        <option value="depok">Depok</option>
+                        <option value="bogor">Bogor</option>
+                        <option value="tangerang">Tangerang</option>
+                        <option value="bekasi">Bekasi</option>
+                        <option value="lainya">Lainya</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="email" class="col-4 col-form-label">Email</label>
+                <div class="col-8">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fa fa-500px"></i>
+                            </div>
+                        </div>
+                        <input id="email" name="email" type="text" class="form-control">
                     </div>
                 </div>
             </div>
@@ -98,15 +197,21 @@ foreach ($skill as $s) {
                 </div>
             </div>
         </form>
-    <hr>
-    <?php 
-    echo "Nama : " . $nama . "<br>";
-    echo "Skill : ";
-    foreach ($skill as $s){
-        echo $s . ",";
-    }
-    echo "<br> Skor : " . $skor;
-    ?>
+        <hr>
+        <?php
+        echo "NIM : " . $nim . "<br>";
+        echo "Nama : " . $nama . "<br>";
+        echo "Jenis Kelamin : " . $jk . "<br>";
+        echo "Program Studi : " . $program_studi . "<br>";
+        echo "Skill : ";
+        foreach ($skill as $s) {
+            echo $s . ", ";
+        }
+        echo "<br> Skor : " . $skor . "<br>";
+        echo "Kategori Skill : ". $kategori_skill . "<br>";
+        echo "Email : ". $email . "<br>";
+
+        ?>
 
     </div>
 
