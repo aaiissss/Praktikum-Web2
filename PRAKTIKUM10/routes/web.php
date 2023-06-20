@@ -5,6 +5,9 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrontedController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\TampilanController;
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,17 +21,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [TampilanController::class, 'index']);
+
+// bikin route group berdasarkan role : admin dan manager
 
 //bikin routing untuk dashboard
+Route::group(['middleware' => ['auth']], function () {
+    // Buat route untuk peran admin dan manager
+Route::group(['middleware' => ['auth', 'peran:admin-manager']], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
+    Route::get('/produk/create', [ProdukController::class, 'create']);
+    Route::post('/produk/store', [ProdukController::class, 'store']);
+    Route::get('produk/edit/{id}', [ProdukController::class, 'edit']);
+    Route::put('/produk/update/{id}', [ProdukController::class, 'update']);
+    Route::get('/produk/delete/{id}', [ProdukController::class, 'destroy']);
+});
 
-Route::get('/dashboard', [DashboardController::class, 'index']);
-//bikin routing untuk produk
+    // Buat route untuk after_registrasi
+Route::get('/after_register', function () {
+    return view('after_register');
+});
+});
 
-Route::get('/produk', [ProdukController::class, 'index']);
-// bikin routing frontend
-Route::get('/Fronted', [FrontedController::class, 'index']);
-// bikin routing untuk produk pake kontroler
-Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -1,5 +1,10 @@
 @extends('admin.layout.appadmin')
 @section('content')
+
+    {{-- pelanggan tidak bisa akses --}}
+    @if (Auth::user()->role != 'pelanggan')
+
+
     <h1 class="mt-4">Tables</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
@@ -12,6 +17,9 @@
     </div>
     <div class="card mb-4">
         <div class="card-header">
+            @if (Auth::user()->role == 'admin')
+	<a class="btn btn-primary" href="{{ url('produk/create') }}">Create</a>
+@endif
         </div>
         <div class="card-body">
             <table id="datatablesSimple">
@@ -55,6 +63,9 @@
                             <td>{{ $p->deskripsi }}</td>
                             <td>{{ $p->nama_kategori }}</td>
                             <!--- nama_kategori diambil dari join yang ada di controller produk yang sudah dibuatkan join -->
+                            @if (Auth::user()->role == 'admin')
+	<a href="{{ url('produk/delete/' . $p->id) }}" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus produk?')">Delete</a>
+@endif
                         </tr>
                         @php $no++; @endphp
                     @endforeach
@@ -63,4 +74,8 @@
         </div>
     </div>
     </div>
+
+    @else
+        @include('admin.access_denied')
+    @endif
 @endsection
